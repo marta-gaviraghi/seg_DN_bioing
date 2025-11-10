@@ -24,7 +24,7 @@ download/: Includes necessary reference files and templates.
 ## Usage
 Clone the repository:
 ```bash
-git clone git@github.com:marta-gaviraghi/seg_DN_bioing.git
+git clone https://github.com/marta-gaviraghi/seg_DN_bioing
 ```
 
 Run the scripts in order:
