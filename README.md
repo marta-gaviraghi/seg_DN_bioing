@@ -30,35 +30,7 @@ download/: Includes necessary reference files and templates.
 Check first which toolboxes you already have: in MATLAB run `ver`.
 Your MATLAB license must include the toolboxes (the university campus license usually does).
 
-**Option A - from MATLAB (easiest)**
-Home > Add-Ons > Get Add-Ons, search for each toolbox and click Install.
-
-**Option B - automatically from the terminal with MPM (MATLAB Package Manager)**
-MPM downloads and installs the toolboxes into an existing MATLAB installation.
-Replace `R2025b` with your MATLAB release and the destination with your MATLAB folder (in MATLAB: `matlabroot`).
-
-macOS (Apple Silicon):
-```bash
-curl -L -o ~/mpm https://www.mathworks.com/mpm/maca64/mpm && chmod +x ~/mpm
-sudo ~/mpm install --release=R2025b --destination=/Applications/MATLAB_R2025b.app --products Deep_Learning_Toolbox Computer_Vision_Toolbox Image_Processing_Toolbox
-```
-On an Intel Mac use `maci64` instead of `maca64` in the URL.
-
-Linux:
-```bash
-wget -O ~/mpm https://www.mathworks.com/mpm/glnxa64/mpm && chmod +x ~/mpm
-sudo ~/mpm install --release=R2025b --destination=/usr/local/MATLAB/R2025b --products Deep_Learning_Toolbox Computer_Vision_Toolbox Image_Processing_Toolbox
-```
-
-Windows: download [mpm.exe](https://www.mathworks.com/mpm/win64/mpm), open a Command Prompt **as administrator** in the download folder and run:
-```bat
-mpm.exe install --release=R2025b --destination="C:\Program Files\MATLAB\R2025b" --products Deep_Learning_Toolbox Computer_Vision_Toolbox Image_Processing_Toolbox
-```
-
-`sudo` / administrator rights are needed because MPM writes into the MATLAB installation folder.
-
-**Option C - MATLAB Online**
-With the university license, [MATLAB Online](https://matlab.mathworks.com) already includes all the toolboxes: no installation needed.
+In MATLAB go to Home > Add-Ons > Get Add-Ons, search for each toolbox and click Install.
 
 ## Usage
 Clone the repository:
@@ -66,11 +38,12 @@ Clone the repository:
 git clone https://github.com/marta-gaviraghi/seg_DN_bioing
 ```
 
-In MATLAB, go to the repository folder and run once:
+In MATLAB, go to the repository folder and run:
 ```matlab
 setup
 ```
 It checks the required toolboxes, downloads the NIfTI toolbox into `download/NIfTI_tools` and adds the repository to the MATLAB path.
+The path is not saved, so run `setup` again each time you restart MATLAB.
 Note: the scripts gunzip/gzip the input images in place, so work on a copy of your data.
 
 Run the scripts in order:
