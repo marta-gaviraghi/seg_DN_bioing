@@ -24,32 +24,34 @@ load('rete1.mat');
 %% Move to output folder
 cd(output_path);
 
-%% Initialize segmentation volume
-dentati_sa = zeros(86, 71, 66);
+if isfile('B0_N.nii.gz')
+    %% Initialize segmentation volume
+    dentati_sa = zeros(86, 71, 66);
 
-% Load normalized B0 image
-!gunzip -f B0_N.nii.gz
-b0_struct = load_untouch_nii('B0_N.nii');
-b0_img = b0_struct.img;
-b0_test = b0_img(30:115, 10:80, 5:70); % crop as in original
-!gzip -f B0_N.nii
-    
-% CNN segmentation slice-by-slice
-for slice = 1:66
-    [C, score] = semanticseg(b0_test(:,:,slice), net);
-    dentati_sa_slice = uint8(C) - 1; % DN = 1, background = 0
-    dentati_sa(:,:,slice) = dentati_sa_slice;
-end
-    
-% Expand segmentation to full volume
-dent_sa_dim = zeros(145, 174, 145);
-dent_sa_dim(30:115, 10:80, 5:70) = dentati_sa;
-    
-% Save CNN segmentation in resampled space
-dentati_sa_struct = b0_struct;
-dentati_sa_struct.img = dent_sa_dim;
-save_untouch_nii(dentati_sa_struct, 'DN_CNN.nii');
-    
+    % Load normalized B0 image
+    !gunzip -f B0_N.nii.gz
+    b0_struct = load_untouch_nii('B0_N.nii');
+    b0_img = b0_struct.img;
+    b0_test = b0_img(30:115, 10:80, 5:70); % crop as in original
+    !gzip -f B0_N.nii
+
+    % CNN segmentation slice-by-slice
+    for slice = 1:66
+        [C, score] = semanticseg(b0_test(:,:,slice), net);
+        dentati_sa_slice = uint8(C) - 1; % DN = 1, background = 0
+        dentati_sa(:,:,slice) = dentati_sa_slice;
+    end
+
+    % Expand segmentation to full volume
+    dent_sa_dim = zeros(145, 174, 145);
+    dent_sa_dim(30:115, 10:80, 5:70) = dentati_sa;
+
+    % Save CNN segmentation in resampled space
+    dentati_sa_struct = b0_struct;
+    dentati_sa_struct.img = dent_sa_dim;
+    save_untouch_nii(dentati_sa_struct, 'DN_CNN.nii');
+
 else
-    disp('Required inputs from previous steps not found! Run scripts 1 and 2 first.');
+    disp('B0_N.nii.gz not found in output_path! Run resampling_normalize_2 first.');
+end
 end
